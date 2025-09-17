@@ -1,4 +1,6 @@
 <?php
+// The Main Goal: Learn how to clean, transform, and summarize data (arrays) using modern PHP 8 tools.
+
 declare(strict_types=1);
 
 $articles = [
@@ -14,6 +16,32 @@ function slugify(string $title): string {
     $slug = preg_replace('/[^a-z0-9]+/i', '-', $slug);
     return trim($slug, '-');
 }
+
+// function slugify(string $title): string
+// A function named slugify that takes a string title and returns a string.
+// 
+// $slug = strtolower($title);
+// Make everything lowercase.
+// Darija: klchi small letters.
+// 
+// $slug = preg_replace('/[^a-z0-9]+/i', '-', $slug);
+// Replace any group of non letters/digits with -.
+// Spaces, accents, symbols → become dashes.
+// 
+// return trim($slug, '-');
+// Remove extra - at start or end.
+// 
+// Examples of slugs with your data:
+// 
+// "Intro Laravel" → intro-laravel
+// 
+// "PHP 8 en pratique" → php-8-en-pratique
+// 
+// "Validation FormRequest" → validation-formrequest
+
+
+////////////////////////////////////////////////////////////////////////////////
+
 
 
 $published = array_values(
@@ -31,9 +59,27 @@ $light = array_map(
   $published
 );
 
+// array_map transforms each article into a smaller shape (id, title, slug, views).
+// We call slugify($a['title']) to build the URL-friendly slug.
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
 $top = $light;
 usort($top, fn($a, $b) => $b['views'] <=> $a['views']);
 $top3 = array_slice($top, 0, 3);
+
+
+
+// $top = $light; work on a copy.
+// 
+// usort(..., fn($a,$b)=> $b['views'] <=> $a['views'])
+// Sort descending by views (big to small).
+// <=> = spaceship operator (compare).
+// 
+// array_slice($top, 0, 3) → take first 3.
 
 $byAuthor = array_reduce(
   $published,
@@ -44,6 +90,9 @@ $byAuthor = array_reduce(
   },
   []
 );
+
+
+
 
 $allTags = array_merge(...array_map(fn($a) => $a['tags'], $published));
 
